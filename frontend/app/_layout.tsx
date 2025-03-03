@@ -12,7 +12,8 @@ export default function RootLayout() {
           headerTintColor: '#fff',
           contentStyle: {
             backgroundColor: '#121212',
-          }
+          },
+          headerBackTitle: 'Back'
         }}
       >
         <Stack.Screen 
