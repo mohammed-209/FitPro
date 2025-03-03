@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router';
-import { Providers } from './providers';
+import Providers from './providers';
 
 export default function RootLayout() {
   return (
@@ -22,17 +22,15 @@ export default function RootLayout() {
           }} 
         />
         <Stack.Screen 
-          name="auth/login" 
+          name="auth" 
           options={{ 
-            title: 'Login',
-            headerShown: true
+            headerShown: false 
           }} 
         />
         <Stack.Screen 
-          name="auth/signup" 
+          name="(app)" 
           options={{ 
-            title: 'Sign Up',
-            headerShown: true
+            headerShown: false 
           }} 
         />
       </Stack>

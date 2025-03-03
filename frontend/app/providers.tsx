@@ -35,7 +35,7 @@ const theme = {
   fonts: configureFonts({ config: fontConfig }),
 };
 
-export function Providers({ children }: PropsWithChildren) {
+export default function Providers({ children }: PropsWithChildren) {
   return (
     <GestureHandlerRootView style={styles.container}>
       <SafeAreaProvider>

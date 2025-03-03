@@ -1,16 +1,20 @@
 import { View, StyleSheet } from 'react-native';
 import { Text, TextInput, Button, HelperText } from 'react-native-paper';
 import { useState } from 'react';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { validateEmail, validatePassword, validateUsername } from '../../utils/validation';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function SignUp() {
+  const { signup } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [errors, setErrors] = useState({ email: '', password: '', username: '' });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
     const usernameError = validateUsername(username);
@@ -22,8 +26,20 @@ export default function SignUp() {
     });
 
     if (!emailError && !passwordError && !usernameError) {
-      // TODO: Implement signup logic
-      console.log('Sign Up:', { email, password, username });
+      setLoading(true);
+      try {
+        await signup(email, password, username);
+        router.replace('/(app)/home');
+      } catch (err) {
+        console.error('Signup error:', err);
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An error occurred during signup');
+        }
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -38,6 +54,7 @@ export default function SignUp() {
         style={styles.input}
         autoCapitalize="none"
         error={!!errors.username}
+        disabled={loading}
       />
       <HelperText type="error" visible={!!errors.username}>
         {errors.username}
@@ -51,6 +68,7 @@ export default function SignUp() {
         keyboardType="email-address"
         autoCapitalize="none"
         error={!!errors.email}
+        disabled={loading}
       />
       <HelperText type="error" visible={!!errors.email}>
         {errors.email}
@@ -63,15 +81,28 @@ export default function SignUp() {
         style={styles.input}
         secureTextEntry
         error={!!errors.password}
+        disabled={loading}
       />
       <HelperText type="error" visible={!!errors.password}>
         {errors.password}
       </HelperText>
-      <Button mode="contained" onPress={handleSignUp} style={styles.button}>
+      
+      {error ? <Text style={styles.error}>{error}</Text> : null}
+      
+      <Button 
+        mode="contained" 
+        onPress={handleSignUp}
+        style={styles.button}
+        loading={loading}
+        disabled={loading}
+      >
         Sign Up
       </Button>
+      
       <Link href="/auth/login" asChild>
-        <Button mode="text">Already have an account? Login</Button>
+        <Button mode="text" disabled={loading}>
+          Already have an account? Login
+        </Button>
       </Link>
     </View>
   );
@@ -89,4 +120,9 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 16,
   },
+  error: {
+    color: 'red',
+    marginBottom: 12,
+    textAlign: 'center',
+  }
 }); 

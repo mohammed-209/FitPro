@@ -2,11 +2,22 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authService } from '../services/auth';
 import { setAuthToken } from '../services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
 
 interface User {
   id: string;
   email: string;
   username: string;
+  profile?: UserProfile;
+}
+
+interface UserProfile {
+  age: string;
+  weight: string;
+  height: string;
+  gender: string;
+  fitnessLevel: string;
+  fitnessGoals: string;
 }
 
 interface AuthContextType {
@@ -15,6 +26,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string, username: string) => Promise<void>;
   logout: () => Promise<void>;
+  updateProfile: (profileData: UserProfile) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -22,6 +34,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     loadStoredUser();
@@ -46,41 +59,81 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     try {
       const response = await authService.login(email, password);
-      setUser(response.user);
+      const userData = {
+        id: email,
+        email: email,
+        username: response.username,
+        profile: response.profile
+      };
+      setUser(userData);
       setAuthToken(response.token);
-      await AsyncStorage.setItem('user', JSON.stringify(response.user));
+      await AsyncStorage.setItem('user', JSON.stringify(userData));
       await AsyncStorage.setItem('token', response.token);
+
+      // Check if user has a profile and redirect accordingly
+      if (!response.profile) {
+        router.replace('/auth/profile-setup');
+      } else {
+        router.replace('/(app)/home');
+      }
     } catch (error) {
-      throw new Error('Login failed');
+      console.error('Login error:', error);
+      throw error;
     }
   };
 
   const signup = async (email: string, password: string, username: string) => {
     try {
       const response = await authService.signup(email, password, username);
-      setUser(response.user);
+      const userData = {
+        id: email,
+        email: email,
+        username: response.username
+      };
+      setUser(userData);
       setAuthToken(response.token);
-      await AsyncStorage.setItem('user', JSON.stringify(response.user));
+      await AsyncStorage.setItem('user', JSON.stringify(userData));
       await AsyncStorage.setItem('token', response.token);
+      // After successful signup, redirect to profile setup
+      router.replace('/auth/profile-setup');
     } catch (error) {
-      throw new Error('Signup failed');
+      console.error('Signup error:', error);
+      throw error;
+    }
+  };
+
+  const updateProfile = async (profileData: UserProfile) => {
+    if (!user) return;
+    try {
+      const response = await authService.updateProfile(profileData);
+      const updatedUser: User = {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        profile: response.profile
+      };
+      setUser(updatedUser);
+      await AsyncStorage.setItem('user', JSON.stringify(updatedUser));
+    } catch (error) {
+      console.error('Profile update error:', error);
+      throw error;
     }
   };
 
   const logout = async () => {
     try {
-      await authService.logout();
       setUser(null);
       setAuthToken('');
       await AsyncStorage.removeItem('user');
       await AsyncStorage.removeItem('token');
+      router.replace('/auth/login');
     } catch (error) {
       console.error('Logout failed:', error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, signup, logout, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );
