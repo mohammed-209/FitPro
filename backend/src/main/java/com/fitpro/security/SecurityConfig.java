@@ -50,7 +50,13 @@ public class SecurityConfig {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> {
-                auth.requestMatchers("/auth/**", "/test/**", "/h2-console/**").permitAll();
+                logger.debug("Configuring authorization rules");
+                auth.requestMatchers(
+                    "/auth/**",
+                    "/test/**",
+                    "/h2-console/**"
+                ).permitAll();
+                auth.requestMatchers("/api/users/profile/**").authenticated();
                 auth.anyRequest().authenticated();
             })
             .headers(headers -> 
@@ -77,16 +83,48 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        logger.debug("Configuring CORS");
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization"));
-        configuration.setAllowCredentials(false);
+        
+        // Allow specific origins for development using patterns
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+            "http://localhost:*",      // Any localhost port
+            "exp://192.168.50.86:*"    // Any Expo port on your IP
+        ));
+        
+        // Allow all common HTTP methods
+        configuration.setAllowedMethods(Arrays.asList(
+            "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"
+        ));
+        
+        // Allow all common headers
+        configuration.setAllowedHeaders(Arrays.asList(
+            "Authorization",
+            "Content-Type",
+            "X-Requested-With",
+            "Accept",
+            "Origin",
+            "Access-Control-Request-Method",
+            "Access-Control-Request-Headers",
+            "Access-Control-Allow-Origin"
+        ));
+        
+        // Expose necessary headers
+        configuration.setExposedHeaders(Arrays.asList(
+            "Authorization",
+            "Access-Control-Allow-Origin",
+            "Access-Control-Allow-Credentials"
+        ));
+        
+        // Allow credentials
+        configuration.setAllowCredentials(true);
+        
+        // Cache preflight requests for 1 hour
         configuration.setMaxAge(3600L);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+        logger.debug("CORS configuration completed");
         return source;
     }
 

@@ -1,11 +1,9 @@
-import { View, StyleSheet, Alert } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Text, TextInput, Button, HelperText } from 'react-native-paper';
 import { useState } from 'react';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import { validateEmail, validatePassword } from '../../utils/validation';
 import { useAuth } from '../../contexts/AuthContext';
-import { authService } from '../../services/auth';
-import { AxiosError } from 'axios';
 
 export default function Login() {
   const { login } = useAuth();
@@ -14,8 +12,13 @@ export default function Login() {
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
+    // Reset errors
+    setError('');
+    
+    // Validate inputs
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
     
@@ -27,44 +30,17 @@ export default function Login() {
     if (!emailError && !passwordError) {
       setLoading(true);
       try {
-        console.log('Starting login attempt...');
         await login(email, password);
-        console.log('Login successful');
+        // Login successful - navigation will be handled by auth context
       } catch (err) {
         console.error('Login error:', err);
-        // Show error in alert for debugging
-        if (err instanceof AxiosError) {
-          Alert.alert(
-            'Login Error',
-            `Status: ${err.response?.status}\nMessage: ${err.message}\nResponse: ${JSON.stringify(err.response?.data)}`
-          );
-          setError(err.message);
-        } else if (err instanceof Error) {
-          Alert.alert('Login Error', err.message);
+        if (err instanceof Error) {
           setError(err.message);
         } else {
-          Alert.alert('Login Error', 'An unknown error occurred');
-          setError('An unknown error occurred');
+          setError('An unexpected error occurred. Please try again.');
         }
       } finally {
         setLoading(false);
-      }
-    }
-  };
-
-  const testConnection = async () => {
-    try {
-      console.log('Testing connection...');
-      const response = await fetch('http://192.168.50.86:8080/test');
-      const text = await response.text();
-      console.log('Test response:', text);
-      Alert.alert('Test Result', text);
-    } catch (error) {
-      console.error('Test error:', error);
-      if (error instanceof Error) {
-        Alert.alert('Test Error', error.message);
-      } else {
-        Alert.alert('Test Error', 'An unknown error occurred');
       }
     }
   };
@@ -91,16 +67,24 @@ export default function Login() {
         label="Password"
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
+        secureTextEntry={!showPassword}
         style={styles.input}
         error={!!errors.password}
         disabled={loading}
+        right={
+          <TextInput.Icon 
+            icon={showPassword ? "eye-off" : "eye"} 
+            onPress={() => setShowPassword(!showPassword)}
+          />
+        }
       />
       <HelperText type="error" visible={!!errors.password}>
         {errors.password}
       </HelperText>
       
-      {error ? <Text style={styles.error}>{error}</Text> : null}
+      {error ? (
+        <Text style={styles.error}>{error}</Text>
+      ) : null}
       
       <Button 
         mode="contained" 
@@ -121,22 +105,6 @@ export default function Login() {
         Don't have an account? Sign up
       </Button>
 
-      <Button 
-        mode="outlined"
-        onPress={testConnection}
-        style={[styles.button, styles.testButton]}
-      >
-        Test Connection
-      </Button>
-
-      {/* For development purposes only */}
-      <Button 
-        mode="outlined" 
-        onPress={() => router.replace('/(app)/home')}
-        style={styles.devButton}
-      >
-        Skip Login (Dev Mode)
-      </Button>
     </View>
   );
 }
@@ -152,22 +120,14 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   input: {
-    marginBottom: 12,
+    marginBottom: 4,
   },
   button: {
     marginTop: 8,
   },
-  devButton: {
-    marginTop: 24,
-    backgroundColor: '#f0f0f0',
-  },
   error: {
-    color: 'red',
+    color: '#B00020',
     marginBottom: 12,
     textAlign: 'center',
-  },
-  testButton: {
-    marginTop: 16,
-    backgroundColor: '#e0e0e0',
-  },
+  }
 }); 

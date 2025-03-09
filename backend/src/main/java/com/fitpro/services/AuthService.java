@@ -3,11 +3,13 @@ package com.fitpro.services;
 import com.fitpro.dto.AuthResponse;
 import com.fitpro.dto.LoginRequest;
 import com.fitpro.dto.SignupRequest;
+import com.fitpro.exceptions.AuthException;
 import com.fitpro.models.User;
 import com.fitpro.repositories.UserRepository;
 import com.fitpro.security.CustomUserDetails;
 import com.fitpro.security.JwtTokenProvider;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,7 +38,7 @@ public class AuthService {
 
     public AuthResponse signup(SignupRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already exists");
+            throw AuthException.emailExists();
         }
 
         User user = new User();
@@ -52,27 +54,31 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            );
 
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        User user = userDetails.getUser();
-        String token = jwtTokenProvider.generateToken(userDetails);
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            User user = userDetails.getUser();
+            String token = jwtTokenProvider.generateToken(userDetails);
 
-        // Get user's profile if any fields are set
-        Map<String, String> profile = null;
-        if (user.getAge() != null || user.getWeight() != null || user.getHeight() != null || 
-            user.getGender() != null || user.getFitnessLevel() != null || user.getFitnessGoals() != null) {
-            profile = new HashMap<>();
-            profile.put("age", user.getAge());
-            profile.put("weight", user.getWeight());
-            profile.put("height", user.getHeight());
-            profile.put("gender", user.getGender());
-            profile.put("fitnessLevel", user.getFitnessLevel());
-            profile.put("fitnessGoals", user.getFitnessGoals());
+            // Get user's profile if any fields are set
+            Map<String, String> profile = null;
+            if (user.getAge() != null || user.getWeight() != null || user.getHeight() != null || 
+                user.getGender() != null || user.getFitnessLevel() != null || user.getFitnessGoals() != null) {
+                profile = new HashMap<>();
+                profile.put("age", user.getAge());
+                profile.put("weight", user.getWeight());
+                profile.put("height", user.getHeight());
+                profile.put("gender", user.getGender());
+                profile.put("fitnessLevel", user.getFitnessLevel());
+                profile.put("fitnessGoals", user.getFitnessGoals());
+            }
+
+            return new AuthResponse(token, user.getUsername(), profile);
+        } catch (BadCredentialsException e) {
+            throw AuthException.invalidCredentials();
         }
-
-        return new AuthResponse(token, user.getUsername(), profile);
     }
 } 

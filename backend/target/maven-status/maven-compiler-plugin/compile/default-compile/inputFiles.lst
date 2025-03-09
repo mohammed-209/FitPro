@@ -16,6 +16,7 @@ C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\
 C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\fitpro\models\BaseEntity.java
 C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\fitpro\models\Goal.java
 C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\fitpro\repositories\UserRepository.java
+C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\fitpro\exceptions\GlobalExceptionHandler.java
 C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\fitpro\models\Achievement.java
 C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\fitpro\controllers\UserController.java
 C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\fitpro\models\WorkoutExerciseId.java
@@ -25,5 +26,6 @@ C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\
 C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\fitpro\controllers\TestController.java
 C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\fitpro\security\JwtTokenFilter.java
 C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\fitpro\security\SecurityConfig.java
+C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\fitpro\exceptions\AuthException.java
 C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\fitpro\dto\UserProfileRequest.java
 C:\Users\moham\OneDrive\Desktop\senior project\FitPro\backend\src\main\java\com\fitpro\security\CustomUserDetailsService.java

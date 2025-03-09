@@ -8,6 +8,7 @@ com\fitpro\dto\LoginRequest.class
 com\fitpro\models\UserStats.class
 com\fitpro\services\ExerciseService.class
 com\fitpro\repositories\UserRepository.class
+com\fitpro\exceptions\AuthException.class
 com\fitpro\models\Workout.class
 com\fitpro\controllers\UserController.class
 com\fitpro\services\JwtService.class
@@ -20,6 +21,7 @@ com\fitpro\models\Exercise.class
 com\fitpro\dto\GenerateWorkoutRequest.class
 com\fitpro\models\User.class
 com\fitpro\dto\AuthResponse.class
+com\fitpro\exceptions\GlobalExceptionHandler.class
 com\fitpro\security\CustomUserDetailsService.class
 com\fitpro\models\WorkoutExerciseId.class
 com\fitpro\security\JwtTokenFilter.class
