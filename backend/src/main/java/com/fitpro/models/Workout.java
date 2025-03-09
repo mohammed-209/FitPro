@@ -2,18 +2,21 @@ package com.fitpro.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.UUID;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "workouts")
-public class Workout extends BaseEntity {
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+@NoArgsConstructor
+@AllArgsConstructor
+public class Workout {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
     @Column(nullable = false)
     private String name;
@@ -27,13 +30,15 @@ public class Workout extends BaseEntity {
     private String difficultyLevel;
 
     @Column(name = "is_ai_generated")
-    private Boolean isAiGenerated;
+    private Boolean isAiGenerated = false;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @PrePersist
-    protected void onCreate() {
-        createdAt = LocalDateTime.now();
-    }
+    @OneToMany(mappedBy = "workout")
+    private Set<PlanWorkout> planWorkouts;
 } 
