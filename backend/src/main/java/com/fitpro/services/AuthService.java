@@ -60,9 +60,10 @@ public class AuthService {
         User user = userDetails.getUser();
         String token = jwtTokenProvider.generateToken(userDetails);
 
-        // Get user's profile if it exists
+        // Get user's profile if any fields are set
         Map<String, String> profile = null;
-        if (user.getAge() != null || user.getWeight() != null || user.getHeight() != null) {
+        if (user.getAge() != null || user.getWeight() != null || user.getHeight() != null || 
+            user.getGender() != null || user.getFitnessLevel() != null || user.getFitnessGoals() != null) {
             profile = new HashMap<>();
             profile.put("age", user.getAge());
             profile.put("weight", user.getWeight());
