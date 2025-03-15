@@ -11,6 +11,7 @@ import java.util.UUID;
 public class User {
     @Id
     @GeneratedValue
+    @Column(name = "user_id")
     private UUID id;
 
     @Column(unique = true, nullable = false)
@@ -27,9 +28,9 @@ public class User {
     private LocalDateTime lastLogin;
 
     // Profile fields
-    private String age;
-    private String weight;
-    private String height;
+    private Integer age;
+    private Double weight;
+    private Double height;
     private String gender;
     private String fitnessLevel;
     private String fitnessGoals;

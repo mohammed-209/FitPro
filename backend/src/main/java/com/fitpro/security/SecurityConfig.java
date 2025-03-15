@@ -86,10 +86,15 @@ public class SecurityConfig {
         logger.debug("Configuring CORS");
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Allow specific origins for development using patterns
+        // Allow specific origins for development
         configuration.setAllowedOriginPatterns(Arrays.asList(
-            "http://localhost:*",      // Any localhost port
-            "exp://192.168.50.86:*"    // Any Expo port on your IP
+            "http://localhost:*",
+            "http://192.168.0.165:*",
+            "exp://192.168.0.165:*",
+            "exp://192-168-0-165.*",
+            "http://192.168.0.215:*",
+            "exp://192.168.0.215:*",
+            "exp://192-168-0-215.*"
         ));
         
         // Allow all common HTTP methods
@@ -97,27 +102,24 @@ public class SecurityConfig {
             "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"
         ));
         
-        // Allow all common headers
+        // Allow specific headers
         configuration.setAllowedHeaders(Arrays.asList(
             "Authorization",
             "Content-Type",
-            "X-Requested-With",
             "Accept",
             "Origin",
             "Access-Control-Request-Method",
-            "Access-Control-Request-Headers",
-            "Access-Control-Allow-Origin"
+            "Access-Control-Request-Headers"
         ));
         
         // Expose necessary headers
         configuration.setExposedHeaders(Arrays.asList(
             "Authorization",
-            "Access-Control-Allow-Origin",
-            "Access-Control-Allow-Credentials"
+            "Access-Control-Allow-Origin"
         ));
         
-        // Allow credentials
-        configuration.setAllowCredentials(true);
+        // Don't allow credentials
+        configuration.setAllowCredentials(false);
         
         // Cache preflight requests for 1 hour
         configuration.setMaxAge(3600L);

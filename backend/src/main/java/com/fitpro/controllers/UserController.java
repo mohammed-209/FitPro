@@ -56,7 +56,7 @@ public class UserController {
 
             // Create response with profile data
             Map<String, Object> response = new HashMap<>();
-            Map<String, String> profile = new HashMap<>();
+            Map<String, Object> profile = new HashMap<>();
             
             profile.put("age", user.getAge());
             profile.put("weight", user.getWeight());
@@ -96,7 +96,7 @@ public class UserController {
 
             // Create response with profile data
             Map<String, Object> response = new HashMap<>();
-            Map<String, String> profile = new HashMap<>();
+            Map<String, Object> profile = new HashMap<>();
             
             profile.put("age", user.getAge());
             profile.put("weight", user.getWeight());

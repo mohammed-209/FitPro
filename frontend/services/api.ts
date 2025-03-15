@@ -13,12 +13,12 @@ const logRequest = (config: InternalAxiosRequestConfig) => {
 
 // Create axios instance with base URL
 const api = axios.create({
-  baseURL: 'http://192.168.50.86:8080',
+  baseURL: 'http://192.168.0.215:8080',
   headers: {
     'Content-Type': 'application/json',
     'Accept': '*/*'
   },
-  timeout: 30000 // 10 seconds timeout
+  timeout: 10000 // 30 seconds timeout
 });
 
 // Add request interceptor for debugging and token

@@ -9,5 +9,5 @@ import java.util.Map;
 public class AuthResponse {
     private String token;
     private String username;
-    private Map<String, String> profile;
+    private Map<String, Object> profile;
 } 
