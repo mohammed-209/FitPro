@@ -8,12 +8,14 @@ com\fitpro\models\Achievement.class
 com\fitpro\dto\LoginRequest.class
 com\fitpro\models\UserStats.class
 com\fitpro\services\ExerciseService.class
+com\fitpro\repositories\UserStatsRepository.class
 com\fitpro\models\WorkoutPlan$Category.class
 com\fitpro\repositories\UserRepository.class
 com\fitpro\models\PlanWorkout.class
 com\fitpro\exceptions\AuthException.class
 com\fitpro\models\Workout.class
 com\fitpro\controllers\UserController.class
+com\fitpro\controllers\UserStatsController.class
 com\fitpro\services\JwtService.class
 com\fitpro\models\WorkoutPlan$DifficultyLevel.class
 com\fitpro\controllers\AuthController.class
@@ -33,4 +35,6 @@ com\fitpro\security\JwtTokenFilter.class
 com\fitpro\FitProApplication.class
 com\fitpro\repositories\ExerciseRepository.class
 com\fitpro\services\AuthService.class
+com\fitpro\services\UserStatsService.class
+com\fitpro\dto\StatsRequestDTO.class
 com\fitpro\models\WorkoutExercise.class

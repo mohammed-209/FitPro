@@ -21,6 +21,20 @@ interface ProfileResponse {
   profile: UserProfile;
 }
 
+const AUTH_TOKEN_KEY = '@auth_token';
+
+export const setAuthToken = async (token: string) => {
+  await AsyncStorage.setItem(AUTH_TOKEN_KEY, token);
+};
+
+export const getAuthToken = async (): Promise<string | null> => {
+  return AsyncStorage.getItem(AUTH_TOKEN_KEY);
+};
+
+export const removeAuthToken = async () => {
+  await AsyncStorage.removeItem(AUTH_TOKEN_KEY);
+};
+
 export const authService = {
   async login(email: string, password: string): Promise<AuthResponse> {
     try {

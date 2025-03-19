@@ -18,8 +18,8 @@ export default function Home() {
     workoutsCompleted: 24,
   };
 
-  const StatCard = ({ title, value, icon }: { title: string; value: string; icon: string }) => (
-    <Surface style={styles.statCard} elevation={1}>
+  const StatCard = ({ title, value, icon, onPress }: { title: string; value: string; icon: string; onPress?: () => void }) => (
+    <Surface style={[styles.statCard, onPress && styles.pressable]} elevation={1} onTouchEnd={onPress}>
       <MaterialCommunityIcons name={icon as any} size={24} color={theme.colors.primary} />
       <Text variant="titleLarge" style={styles.statValue}>{value}</Text>
       <Text variant="bodySmall">{title}</Text>
@@ -45,7 +45,12 @@ export default function Home() {
       {/* Quick Stats Grid */}
       <View style={styles.statsGrid}>
         <StatCard title="Streak" value={`${workoutStreak} days`} icon="fire" />
-        <StatCard title="Weight" value={userStats.weight} icon="scale-bathroom" />
+        <StatCard 
+          title="Weight" 
+          value={userStats.weight} 
+          icon="scale-bathroom" 
+          onPress={() => router.push('/stats/progress')}
+        />
         <StatCard title="Workouts" value={userStats.workoutsCompleted.toString()} icon="dumbbell" />
       </View>
 
@@ -229,5 +234,8 @@ const styles = StyleSheet.create({
   },
   textLight: {
     color: '#fff',
+  },
+  pressable: {
+    opacity: 0.8,
   },
 }); 

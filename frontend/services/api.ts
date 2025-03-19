@@ -13,7 +13,7 @@ const logRequest = (config: InternalAxiosRequestConfig) => {
 
 // Create axios instance with base URL
 const api = axios.create({
-  baseURL: 'http://192.168.0.215:8080',
+  baseURL: 'http://192.168.50.86:8080',
   headers: {
     'Content-Type': 'application/json',
     'Accept': '*/*'

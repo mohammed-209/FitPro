@@ -1,5 +1,9 @@
 {
   "dependencies": {
-    "@expo/vector-icons": "^14.0.4"
+    "@expo/vector-icons": "^14.0.4",
+    "@react-native-community/datetimepicker": "^8.3.0",
+    "react-native-svg": "^15.11.2",
+    "victory-core": "^37.3.6",
+    "victory-native": "^41.16.1"
   }
 }

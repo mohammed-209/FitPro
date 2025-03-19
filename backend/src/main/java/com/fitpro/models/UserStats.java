@@ -23,9 +23,4 @@ public class UserStats extends BaseEntity {
 
     @Column(name = "measurement_date")
     private LocalDateTime measurementDate;
-
-    @PrePersist
-    protected void onCreate() {
-        measurementDate = LocalDateTime.now();
-    }
 } 
