@@ -114,13 +114,16 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     justifyContent: 'center',
+    backgroundColor: '#121212',
   },
   title: {
     textAlign: 'center',
     marginBottom: 24,
+    color: '#fff',
   },
   input: {
     marginBottom: 4,
+    backgroundColor: '#1C1C1E',
   },
   button: {
     marginTop: 8,

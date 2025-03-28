@@ -33,14 +33,6 @@ export default function Profile() {
       <Card style={styles.card}>
         <Card.Title 
           title="Profile Information"
-          right={(props) => (
-            <IconButton
-              {...props}
-              icon="pencil"
-              onPress={() => router.push('/profile/edit')}
-              iconColor="#fff"
-            />
-          )}
           titleStyle={styles.cardTitle}
         />
         <Card.Content>
@@ -51,13 +43,13 @@ export default function Profile() {
           <View style={styles.infoRow}>
             <Text style={styles.label}>Weight</Text>
             <Text style={styles.value}>
-              {user?.profile?.weight ? `${user.profile.weight} kg` : 'Not set'}
+              {user?.profile?.weight ? `${user.profile.weight} lbs` : 'Not set'}
             </Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.label}>Height</Text>
             <Text style={styles.value}>
-              {user?.profile?.height ? `${user.profile.height} cm` : 'Not set'}
+              {user?.profile?.height ? `${user.profile.height} ft` : 'Not set'}
             </Text>
           </View>
           <View style={styles.infoRow}>

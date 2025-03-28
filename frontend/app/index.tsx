@@ -30,9 +30,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
+    backgroundColor: '#121212',
   },
   title: {
     marginBottom: 20,
+    color: '#fff',
   },
   buttonContainer: {
     width: '100%',

@@ -1,18 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { Card, Text, Button, IconButton, Surface, useTheme, Avatar } from 'react-native-paper';
 import { router } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
+import { useStats } from '../../hooks/useStats';
+import { UNITS } from '../../utils/constants';
 
 export default function Home() {
   const theme = useTheme();
   const { user } = useAuth();
+  const { latestStats, fetchLatestStats } = useStats();
   const [workoutStreak, setWorkoutStreak] = useState(5); // Mock data
 
-  // Mock user stats
+  useEffect(() => {
+    fetchLatestStats();
+  }, [fetchLatestStats]);
+
+  // Mock user stats (keeping other stats as mock for now)
   const userStats = {
-    weight: '175 lbs',
     maxBench: '225 lbs',
     maxSquat: '315 lbs',
     workoutsCompleted: 24,
@@ -47,7 +53,7 @@ export default function Home() {
         <StatCard title="Streak" value={`${workoutStreak} days`} icon="fire" />
         <StatCard 
           title="Weight" 
-          value={userStats.weight} 
+          value={latestStats?.weight ? `${latestStats.weight} ${UNITS.WEIGHT}` : 'Not set'} 
           icon="scale-bathroom" 
           onPress={() => router.push('/stats/progress')}
         />

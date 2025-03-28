@@ -10,28 +10,32 @@ export default function RootLayout() {
             backgroundColor: '#1C1C1E',
           },
           headerTintColor: '#fff',
-          contentStyle: {
-            backgroundColor: '#121212',
+          headerTitleStyle: {
+            color: '#fff',
           },
-          headerBackTitle: 'Back'
+          gestureEnabled: false,
+          headerBackVisible: false
         }}
       >
         <Stack.Screen 
           name="index" 
           options={{ 
-            headerShown: false 
+            headerShown: false,
+            gestureEnabled: false
           }} 
         />
         <Stack.Screen 
           name="auth" 
           options={{ 
-            headerShown: false 
+            headerShown: false,
+            gestureEnabled: false
           }} 
         />
         <Stack.Screen 
           name="(app)" 
           options={{ 
-            headerShown: false 
+            headerShown: false,
+            gestureEnabled: false
           }} 
         />
       </Stack>

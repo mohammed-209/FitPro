@@ -16,10 +16,12 @@ export const StatsChart: React.FC<{
   data: UserStats[];
   title: string;
   unit: string;
+  valueKey: keyof UserStats;
 }> = ({
   data,
   title,
   unit,
+  valueKey,
 }) => {
   const theme = useTheme();
   const [dateRange, setDateRange] = useState<DateRange>('week');
@@ -62,7 +64,7 @@ export const StatsChart: React.FC<{
     
     return filteredData
       .map(stat => ({
-        value: stat.weight || 0,
+        value: Number(stat[valueKey]) || 0,
         label: new Date(stat.measurementDate).getDate().toString(),
         labelComponent: () => (
           <Text style={[styles.label, { color: '#666' }]}>
@@ -71,11 +73,11 @@ export const StatsChart: React.FC<{
         ),
       }))
       .sort((a, b) => {
-        const dateA = new Date(filteredData.find(d => d.weight === a.value)?.measurementDate || '');
-        const dateB = new Date(filteredData.find(d => d.weight === b.value)?.measurementDate || '');
+        const dateA = new Date(filteredData.find(d => Number(d[valueKey]) === a.value)?.measurementDate || '');
+        const dateB = new Date(filteredData.find(d => Number(d[valueKey]) === b.value)?.measurementDate || '');
         return dateA.getTime() - dateB.getTime();
       });
-  }, [data, dateRange]);
+  }, [data, dateRange, valueKey]);
 
   if (!chartData.length) {
     return (

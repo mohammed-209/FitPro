@@ -34,6 +34,7 @@ export default function AppLayout() {
         headerTitleStyle: {
           color: '#fff',
         },
+        headerBackVisible: true
       }}
     >
       <Stack.Screen 
@@ -49,6 +50,13 @@ export default function AppLayout() {
               onPress={handleLogout}
             />
           ),
+        }} 
+      />
+      <Stack.Screen 
+        name="profile/index" 
+        options={{ 
+          title: 'Profile',
+          headerShown: true
         }} 
       />
       {/* Add other authenticated screens here */}

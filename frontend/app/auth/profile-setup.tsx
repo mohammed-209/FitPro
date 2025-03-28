@@ -74,7 +74,7 @@ export default function ProfileSetup() {
       });
       
       if (isEditMode) {
-        router.back();
+        router.replace('/(app)/home ');
       } else {
         router.replace('/(app)/home');
       }
@@ -155,7 +155,7 @@ export default function ProfileSetup() {
         <View style={styles.buttonContainer}>
           <Button
             mode="outlined"
-            onPress={() => router.back()}
+            onPress={() => router.replace('/(app)/profile')}
             style={[styles.button, styles.cancelButton]}
             disabled={loading}
           >

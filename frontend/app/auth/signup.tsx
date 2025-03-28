@@ -98,12 +98,14 @@ export default function SignUp() {
       >
         Sign Up
       </Button>
-      
-      <Link href="/auth/login" asChild>
-        <Button mode="text" disabled={loading}>
-          Already have an account? Login
-        </Button>
-      </Link>
+      <Button 
+        mode="text" 
+        onPress={() => router.push('/auth/login')}
+        style={styles.button}
+        disabled={loading}
+      >
+        Already have an account? Login
+      </Button>
     </View>
   );
 }
@@ -113,15 +115,17 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     justifyContent: 'center',
+    backgroundColor: '#121212',
   },
   input: {
     marginVertical: 4,
+    backgroundColor: '#1C1C1E',
   },
   button: {
     marginTop: 16,
   },
   error: {
-    color: 'red',
+    color: '#cf6679',
     marginBottom: 12,
     textAlign: 'center',
   }
