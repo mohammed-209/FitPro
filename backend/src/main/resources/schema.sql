@@ -1,20 +1,9 @@
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- Drop existing tables if they exist
-DROP TABLE IF EXISTS user_achievements CASCADE;
-DROP TABLE IF EXISTS social_connections CASCADE;
-DROP TABLE IF EXISTS workout_history CASCADE;
-DROP TABLE IF EXISTS workout_exercises CASCADE;
-DROP TABLE IF EXISTS goals CASCADE;
-DROP TABLE IF EXISTS achievements CASCADE;
-DROP TABLE IF EXISTS exercises CASCADE;
-DROP TABLE IF EXISTS workouts CASCADE;
-DROP TABLE IF EXISTS user_stats CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
 
 -- Users table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     user_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
@@ -31,7 +20,7 @@ CREATE TABLE users (
 );
 
 -- User Stats table
-CREATE TABLE user_stats (
+CREATE TABLE IF NOT EXISTS user_stats (
     stat_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(user_id),
     weight FLOAT,
@@ -41,7 +30,7 @@ CREATE TABLE user_stats (
 );
 
 -- Workouts table
-CREATE TABLE workouts (
+CREATE TABLE IF NOT EXISTS workouts (
     workout_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(user_id),
     name VARCHAR(100) NOT NULL,
@@ -53,7 +42,7 @@ CREATE TABLE workouts (
 );
 
 -- Exercises table
-CREATE TABLE exercises (
+CREATE TABLE IF NOT EXISTS exercises (
     exercise_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(100) NOT NULL,
     description TEXT,
@@ -63,7 +52,7 @@ CREATE TABLE exercises (
 );
 
 -- Workout Exercises table
-CREATE TABLE workout_exercises (
+CREATE TABLE IF NOT EXISTS workout_exercises (
     workout_id UUID REFERENCES workouts(workout_id),
     exercise_id UUID REFERENCES exercises(exercise_id),
     sets INTEGER,
@@ -75,17 +64,28 @@ CREATE TABLE workout_exercises (
 );
 
 -- Workout History table
-CREATE TABLE workout_history (
+CREATE TABLE IF NOT EXISTS workout_history (
     history_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID REFERENCES users(user_id),
     workout_id UUID REFERENCES workouts(workout_id),
-    completed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id UUID REFERENCES users(user_id) NOT NULL,
+    workout_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    completed_at TIMESTAMP,
+    muscle_group VARCHAR(50),
     duration_minutes INTEGER,
-    calories_burned INTEGER
+    calories_burned INTEGER,
+    is_completed BOOLEAN DEFAULT true
+);
+
+-- Workout History Exercises table
+CREATE TABLE IF NOT EXISTS workout_history_exercises (
+    history_id UUID REFERENCES workout_history(history_id),
+    exercise_name VARCHAR(100),
+    sets_completed INTEGER,
+    PRIMARY KEY (history_id, exercise_name)
 );
 
 -- Goals table
-CREATE TABLE goals (
+CREATE TABLE IF NOT EXISTS goals (
     goal_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(user_id),
     title VARCHAR(100) NOT NULL,
@@ -99,7 +99,7 @@ CREATE TABLE goals (
 );
 
 -- Achievements table
-CREATE TABLE achievements (
+CREATE TABLE IF NOT EXISTS achievements (
     achievement_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name VARCHAR(100) NOT NULL,
     description TEXT,
@@ -108,7 +108,7 @@ CREATE TABLE achievements (
 );
 
 -- User Achievements table
-CREATE TABLE user_achievements (
+CREATE TABLE IF NOT EXISTS user_achievements (
     user_id UUID REFERENCES users(user_id),
     achievement_id UUID REFERENCES achievements(achievement_id),
     earned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -116,10 +116,10 @@ CREATE TABLE user_achievements (
 );
 
 -- Social Connections table
-CREATE TABLE social_connections (
+CREATE TABLE IF NOT EXISTS social_connections (
     user_id UUID REFERENCES users(user_id),
     friend_id UUID REFERENCES users(user_id),
     status VARCHAR(20),
     connected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id, friend_id)
-); 
+);

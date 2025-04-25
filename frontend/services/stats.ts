@@ -5,11 +5,15 @@ import { AxiosError } from 'axios';
 export interface UserStats {
   id: string;
   weight: number | null;
+  height: number | null;
+  bodyFatPercentage: number | null;
   measurementDate: string;
 }
 
 export interface RecordStatsData {
   weight?: number;
+  height?: number;
+  bodyFatPercentage?: number;
   measurementDate?: Date;
 }
 
@@ -31,13 +35,17 @@ class StatsService {
 
   async getLatestStats(): Promise<UserStats | null> {
     try {
+      console.log('Fetching latest stats...');
       const response = await api.get('/api/stats/latest');
+      console.log('Latest stats fetched successfully:', response.data);
       return response.data;
     } catch (error) {
       if ((error as AxiosError)?.response?.status === 404) {
+        console.log('No stats data found for user, returning null');
         return null;
       }
-      throw new Error('Failed to fetch latest stats');
+      console.error('Error fetching latest stats:', error);
+      throw error;
     }
   }
 

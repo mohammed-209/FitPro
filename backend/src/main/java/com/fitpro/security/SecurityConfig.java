@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Configuration
@@ -86,16 +87,14 @@ public class SecurityConfig {
         logger.debug("Configuring CORS");
         CorsConfiguration configuration = new CorsConfiguration();
         
-        // Allow specific origins for development
-        configuration.setAllowedOriginPatterns(Arrays.asList(
-            "http://localhost:*",
-            "http://192.168.0.165:*",
-            "exp://192.168.0.165:*",
-            "exp://192-168-0-165.*",
-            "http://192.168.0.215:*",
-            "exp://192.168.0.215:*",
-            "exp://192-168-0-215.*"
-        ));
+        // Get allowed origins from environment variable
+        String allowedOrigins = System.getenv("ALLOWED_ORIGINS");
+        if (allowedOrigins != null && !allowedOrigins.isEmpty()) {
+            configuration.setAllowedOriginPatterns(Arrays.asList(allowedOrigins.split(",")));
+        } else {
+            // Default to empty list in production
+            configuration.setAllowedOriginPatterns(Collections.emptyList());
+        }
         
         // Allow all common HTTP methods
         configuration.setAllowedMethods(Arrays.asList(
@@ -119,7 +118,7 @@ public class SecurityConfig {
         ));
         
         // Don't allow credentials
-        configuration.setAllowCredentials(false);
+        configuration.setAllowCredentials(true);
         
         // Cache preflight requests for 1 hour
         configuration.setMaxAge(3600L);

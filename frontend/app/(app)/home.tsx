@@ -5,23 +5,32 @@ import { router } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { useStats } from '../../hooks/useStats';
+import { useWorkouts } from '../../hooks/useWorkouts';
 import { UNITS } from '../../utils/constants';
 
 export default function Home() {
   const theme = useTheme();
   const { user } = useAuth();
   const { latestStats, fetchLatestStats } = useStats();
-  const [workoutStreak, setWorkoutStreak] = useState(5); // Mock data
+  const { workoutStats, fetchWorkoutStats } = useWorkouts();
 
   useEffect(() => {
-    fetchLatestStats();
-  }, [fetchLatestStats]);
+    const loadData = async () => {
+      try {
+        await fetchLatestStats();
+        await fetchWorkoutStats();
+      } catch (err) {
+        console.error('Error loading data:', err);
+      }
+    };
+    
+    loadData();
+  }, [fetchLatestStats, fetchWorkoutStats]);
 
-  // Mock user stats (keeping other stats as mock for now)
+  // Mock user stats (keeping some stats as mock for now)
   const userStats = {
     maxBench: '225 lbs',
     maxSquat: '315 lbs',
-    workoutsCompleted: 24,
   };
 
   const StatCard = ({ title, value, icon, onPress }: { title: string; value: string; icon: string; onPress?: () => void }) => (
@@ -50,14 +59,14 @@ export default function Home() {
 
       {/* Quick Stats Grid */}
       <View style={styles.statsGrid}>
-        <StatCard title="Streak" value={`${workoutStreak} days`} icon="fire" />
+        <StatCard title="Streak" value={`${workoutStats.streak || 0} days`} icon="fire" />
         <StatCard 
           title="Weight" 
           value={latestStats?.weight ? `${latestStats.weight} ${UNITS.WEIGHT}` : 'Not set'} 
           icon="scale-bathroom" 
           onPress={() => router.push('/stats/progress')}
         />
-        <StatCard title="Workouts" value={userStats.workoutsCompleted.toString()} icon="dumbbell" />
+        <StatCard title="Workouts" value={workoutStats.totalWorkouts?.toString() || '0'} icon="dumbbell" />
       </View>
 
       {/* Start Workout Section */}
@@ -73,7 +82,7 @@ export default function Home() {
             onPress={() => router.push('/workouts/generate')}
             style={styles.button}
           >
-            Generate AI Workout
+            Generate Workout
           </Button>
           <Button 
             mode="outlined"

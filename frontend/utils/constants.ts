@@ -1,9 +1,10 @@
 // API Configuration
 export const API_URL = 'http://localhost:8080';
 
-// Units
+// Standard units of measurement
 export const UNITS = {
-  WEIGHT: 'lbs',
-  HEIGHT: 'in',
-  BODY_FAT: '%',
+  WEIGHT: 'kg',
+  HEIGHT: 'cm',
+  DISTANCE: 'km',
+  TIME: 'min'
 }; 
