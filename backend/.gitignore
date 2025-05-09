@@ -50,3 +50,7 @@ target/
 Thumbs.db
 ehthumbs.db
 Desktop.ini 
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
