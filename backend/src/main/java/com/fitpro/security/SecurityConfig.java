@@ -92,8 +92,8 @@ public class SecurityConfig {
         if (allowedOrigins != null && !allowedOrigins.isEmpty()) {
             configuration.setAllowedOriginPatterns(Arrays.asList(allowedOrigins.split(",")));
         } else {
-            // Default to empty list in production
-            configuration.setAllowedOriginPatterns(Collections.emptyList());
+            // Default to allowing all origins in development
+            configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         }
         
         // Allow all common HTTP methods
@@ -117,7 +117,7 @@ public class SecurityConfig {
             "Access-Control-Allow-Origin"
         ));
         
-        // Don't allow credentials
+        // Allow credentials
         configuration.setAllowCredentials(true);
         
         // Cache preflight requests for 1 hour

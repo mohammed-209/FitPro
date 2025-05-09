@@ -9,6 +9,7 @@ com\fitpro\models\UserStats.class
 com\fitpro\repositories\UserStatsRepository.class
 com\fitpro\repositories\UserRepository.class
 com\fitpro\exceptions\AuthException.class
+com\fitpro\models\Workout.class
 com\fitpro\controllers\UserController.class
 com\fitpro\controllers\UserStatsController.class
 com\fitpro\services\JwtService.class
