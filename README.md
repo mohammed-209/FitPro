@@ -31,6 +31,8 @@ FitPro is a comprehensive fitness tracking application that helps users monitor 
 
 ### Profile
 ![Profile Screen](screenshots/profile.png)
+![Profile Setup Screen](screenshots/profileSetup.png)
+
 *User profile management with personal information and settings*
 
 ## 🛠️ Tech Stack
