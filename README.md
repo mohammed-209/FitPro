@@ -14,11 +14,11 @@ FitPro is a comprehensive fitness tracking application that helps users monitor 
 ## 📸 Screenshots
 
 ### Authentication
-![Login Screen](screenshots/login.png)
+![Login Screen](screenshots/authentication.png)
 *Secure login interface with email and password authentication*
 
 ### Dashboard
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](screenshots/mainScreen.png)
 *Main dashboard showing workout summary and quick actions*
 
 ### Workout Tracking
@@ -26,7 +26,7 @@ FitPro is a comprehensive fitness tracking application that helps users monitor 
 *Detailed workout tracking interface with exercise logging*
 
 ### Progress Charts
-![Progress Charts](screenshots/progress.png)
+![Progress Charts](screenshots/tracking.png)
 *Interactive charts showing workout progress and statistics*
 
 ### Profile
